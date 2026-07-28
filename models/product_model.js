@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true  
     },
-    image:String,
+    image:Buffer,
     discout:{
         type: Number,
         default:0  
