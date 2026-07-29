@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(expressSession({
-    secret: process.env.EXPRESS_SESSION_SECRET,
+    secret: process.env.EXPRESS_SESSION_SECRET || "fallbackSecretKey",
     resave: false,
     saveUninitialized: false
 }));
@@ -28,7 +29,7 @@ app.use(expressSession({
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
-require('dotenv').config();
+
 
 //Routes are used here
 app.use('/owners', ownerRouter);
@@ -39,6 +40,10 @@ app.get('/', (req, res) => {
     res.send('This is the home page!');
 });
 
+app.get("/loginpage",(req,res)=>{
+    let error = req.flash('error');
+    res.render("login", { error });
+});
 
 app.listen(3000,()=>{
     console.log('Server is running on port 3000');
