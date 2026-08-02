@@ -15,6 +15,7 @@ const db = require("./config/mongoose-connection");
 const ownerRouter = require('./routes/ownersRouter');
 const userRouter = require('./routes/usersRouter');
 const productRouter = require('./routes/productsRouter');
+const productModel = require('./models/product_model');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -47,6 +48,16 @@ app.get("/loginpage",(req,res)=>{
 
 app.get("/cart", (req, res) => {
     res.render("cart");
+});
+
+app.get("/shop", async (req, res) => {
+    try {
+        const products = await productModel.find();
+        res.render("shop", { products });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading shop page.');
+    }
 });
 
 app.listen(3000,()=>{
